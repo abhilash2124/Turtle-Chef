@@ -26,16 +26,6 @@ export default function Main() {
         }
     }
     
-    // useEffect(() => {
-    //     getRecipe();
-    // }, []);
-    // getRecipe();
-    // ab end
-
-
-    // function toggleRecipeShown() {
-    //     setRecipeShown(prevShown => !prevShown)
-    // }
 
     function addIngredient(formData) {
         const newIngredient = formData.get("ingredient")
