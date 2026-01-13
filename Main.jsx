@@ -19,13 +19,13 @@ export default function Main() {
     async function getRecipe() {
         console.log("Fetching recipe..."); // Tells you the button worked
         try {
-            const recipeMarkdown = await getRecipeFromAI(ingredients); 
+            const recipeMarkdown = await getRecipeFromAI(ingredients);
             setRecipeShown(recipeMarkdown);
         } catch (err) {
             console.error("AI Error:", err);
         }
     }
-    
+
 
     function addIngredient(formData) {
         const newIngredient = formData.get("ingredient")
@@ -34,25 +34,38 @@ export default function Main() {
 
     return (
         <main>
-            <form action={addIngredient} className="add-ingredient-form">
-                <input
-                    type="text"
-                    placeholder="e.g. oregano"
-                    aria-label="Add ingredient"
-                    name="ingredient"
-                />
-                <button>Add ingredient</button>
-            </form>
+            {/* <form action={addIngredient} className="add-ingredient-form"> */}
+            <form
+                className="add-ingredient-form"
+                onSubmit={(e) => {
+                    e.preventDefault()
+                    const formData = new FormData(e.currentTarget)
+                    addIngredient(formData)
+                    e.currentTarget.reset()
+                }}
+            >
+            <input
+                type="text"
+                placeholder="e.g. oregano"
+                aria-label="Add ingredient"
+                name="ingredient"
+            />
+            <button>Add ingredient</button>
+        </form>
 
-            {ingredients.length > 0 &&
-                <IngredientsList
-                    ref={recipeSection}
-                    ingredients={ingredients}
-                    getRecipe={getRecipe}
-                />
-            }
+            
 
-            {recipe && <ClaudeRecipe recipe={recipe} />}
-        </main>
+
+                {
+        ingredients.length > 0 &&
+        <IngredientsList
+            ref={recipeSection}
+            ingredients={ingredients}
+            getRecipe={getRecipe}
+        />
+    }
+
+    { recipe && <ClaudeRecipe recipe={recipe} /> }
+        </main >
     )
 }
