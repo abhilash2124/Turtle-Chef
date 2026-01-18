@@ -3,7 +3,6 @@ import IngredientsList from "./IngredientsList"
 import ClaudeRecipe from "./ClaudeRecipe"
 import { getRecipeFromAI } from "../ai"
 
-
 export default function Main() {
     const [ingredients, setIngredients] = React.useState(
         ["chicken", "all the main spices", "corn", "heavy cream", "pasta"]
@@ -32,6 +31,23 @@ export default function Main() {
             setIngredients(prevIngredients => [...prevIngredients, newIngredient.trim()])
         }
     }
+
+    // NEW: Remove individual ingredient
+    function removeIngredient(ingredientToRemove) {
+        setIngredients(prevIngredients => 
+            prevIngredients.filter(ingredient => ingredient !== ingredientToRemove)
+        )
+        // Clear recipe if we go below 4 ingredients
+        if (ingredients.length <= 4) {
+            setRecipe("")
+        }
+    }
+
+    // NEW: Clear all ingredients
+    function clearAllIngredients() {
+        setIngredients([])
+        setRecipe("")
+    }
     
     return (
         <main>
@@ -51,16 +67,23 @@ export default function Main() {
                 <button type="submit">Add ingredient</button>
             </form>
 
-            {ingredients.length > 0 &&
+            {ingredients.length > 0 ? (
                 <IngredientsList
                     recipeRef={recipeSection}
                     ingredients={ingredients}
                     getRecipe={getRecipe}
                     loading={loading}
+                    removeIngredient={removeIngredient}
+                    clearAllIngredients={clearAllIngredients}
                 />
-            }
+            ) : (
+                <div className="empty-state">
+                    <p>🥘 Add some ingredients to get started!</p>
+                </div>
+            )}
 
             {recipe && <ClaudeRecipe recipe={recipe} />}
         </main>
     )
 }
+
